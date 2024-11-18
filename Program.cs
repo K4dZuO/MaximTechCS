@@ -7,11 +7,41 @@ using System.Threading.Tasks;
 
 namespace MaximTechC_
 {
-    internal class Program
+    class Program
     {
-        static void Task1()
+        private Dictionary<string, int> GetDensityChars(string s)
+        {
+            Dictionary<string, int> dictSymbols = new Dictionary<string, int>();
+
+            foreach (char c in s)
+            {
+                string charString = Convert.ToString(c);
+                if (!dictSymbols.ContainsKey(charString))
+                {
+                    dictSymbols.Add(charString, 1);
+                }
+                else
+                {
+                    dictSymbols[charString]++ ;
+                }
+            }
+            return dictSymbols;
+        }
+
+        private string ReadDictionary(Dictionary<string, int> dictSymbols)
+        {
+            string res = "";
+            foreach (string stringKey in dictSymbols.Keys)
+            {
+                res += $"{stringKey} : {dictSymbols[stringKey]}\n";
+            }
+            return res;
+        }
+
+        private string ProcessString()
         {
             string s;
+            string res;
             bool isAllSymbolsAreCorrect = true;
             char[] allowedSymbols = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
             List<char> incorrectedSymbols = new List<char>();
@@ -30,7 +60,7 @@ namespace MaximTechC_
             if (!isAllSymbolsAreCorrect) 
             {
                 Console.WriteLine($"Ошибка! Введены некорректные символы: {string.Join(", ", incorrectedSymbols)}");
-                return;
+                return "Error";
             }
 
             if (s.Length % 2 == 1)
@@ -38,8 +68,7 @@ namespace MaximTechC_
                 char[] chars = s.ToCharArray();
                 Array.Reverse(chars);
                 string rev_string = string.Concat(chars);
-                string res = string.Concat(rev_string, s);
-                Console.WriteLine("Результат: {0}", res);
+                res = string.Concat(rev_string, s);
             }
             else
             {
@@ -54,16 +83,25 @@ namespace MaximTechC_
                 Array.Copy(chars, middle_index, second_half, 0, middle_index);
                 Array.Reverse(second_half);
 
-                string res = String.Concat(string.Concat(first_half), string.Concat(second_half));
-                Console.WriteLine("Результат: {0}", res);
+                res = String.Concat(string.Concat(first_half), string.Concat(second_half));
             }
-        }
 
+            return res;
+        }
 
         static void Main(string[] args)
         {
-            // task 1
-            Task1();
+            // task 3
+            Program program = new Program();
+            string res = program.ProcessString();
+            if (res != "Error")
+            {
+                Console.WriteLine("Результат: {0}", res);
+                Dictionary<string, int> dctDensity = program.GetDensityChars(res);
+                string dictInfo = program.ReadDictionary(dctDensity);
+                Console.WriteLine("Частота встречаемости символов в обработанной строке:");
+                Console.WriteLine(dictInfo);
+            }
         }
     }
 }
