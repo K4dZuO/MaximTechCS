@@ -1,1 +1,1 @@
-Initialized commit.
+Task 1: string formatter
