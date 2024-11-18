@@ -11,15 +11,35 @@ namespace MaximTechC_
     {
         static void Task1()
         {
-            Console.Write("Enter a string: ");
-            string s = Console.ReadLine();
+            string s;
+            bool isAllSymbolsAreCorrect = true;
+            char[] allowedSymbols = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
+            List<char> incorrectedSymbols = new List<char>();
+
+            Console.Write("Введите строку: ");
+            s = Console.ReadLine();
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (!allowedSymbols.Contains(s[i]))
+                {
+                    isAllSymbolsAreCorrect = false;
+                    incorrectedSymbols.Add(s[i]);
+                } 
+            }
+
+            if (!isAllSymbolsAreCorrect) 
+            {
+                Console.WriteLine($"Ошибка! Введены некорректные символы: {string.Join(", ", incorrectedSymbols)}");
+                return;
+            }
+
             if (s.Length % 2 == 1)
             {
                 char[] chars = s.ToCharArray();
                 Array.Reverse(chars);
                 string rev_string = string.Concat(chars);
                 string res = string.Concat(rev_string, s);
-                Console.WriteLine("Result: {0}", res);
+                Console.WriteLine("Результат: {0}", res);
             }
             else
             {
@@ -35,7 +55,7 @@ namespace MaximTechC_
                 Array.Reverse(second_half);
 
                 string res = String.Concat(string.Concat(first_half), string.Concat(second_half));
-                Console.WriteLine("Result: {0}", res);
+                Console.WriteLine("Результат: {0}", res);
             }
         }
 
