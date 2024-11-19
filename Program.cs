@@ -2,11 +2,158 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MaximTechC_
 {
+
+    class Node
+    {
+        public int Key;
+        public Node Left;
+        public Node Right;
+
+        public Node(int key)
+        {
+            Key = key;
+            Left = null;
+            Right = null;
+        }
+    }
+
+    class BinaryTree
+    {
+        public Node Root;
+
+        public BinaryTree()
+        {
+            Root = null;
+        }
+
+        public void Add(int key)
+        {
+            Node node = new Node(key);
+
+            if (Root == null)
+            {
+                Root = node;
+            }
+            else
+            {
+                RecursiveAdd(Root, node);
+            }
+        }
+
+        private void RecursiveAdd(Node currentNode, Node addNode)
+        {
+            if (addNode.Key < currentNode.Key)
+            {
+                if (currentNode.Left == null)
+                {
+                    currentNode.Left = addNode;
+                }
+                else
+                {
+                    RecursiveAdd(currentNode.Left, addNode);
+                }
+            }
+            else if (addNode.Key >= currentNode.Key)
+            {
+                if (currentNode.Right == null)
+                {
+                    currentNode.Right = addNode;
+                }
+                else
+                {
+                    RecursiveAdd(currentNode.Right, addNode);
+                }
+            }
+        }
+
+        public void InfinixOrder(Node Root, List<int> sortedList)
+        {
+            if (Root == null)
+            {
+                return;
+            }
+
+            InfinixOrder(Root.Left, sortedList);
+            sortedList.Add(Root.Key);
+            InfinixOrder(Root.Right, sortedList);
+        }
+
+    }
+
+    public class TreeSortClass
+    {
+        public static int[] TreeSort(int[] array)
+        {
+            BinaryTree binaryTree = new BinaryTree();
+
+            foreach (int item in array)
+            {
+                binaryTree.Add(item);
+            }
+
+            List<int> sortedList = new List<int>();
+            binaryTree.InfinixOrder(binaryTree.Root, sortedList);
+
+            return sortedList.ToArray();
+        }
+    }
+
+    class QuickSortClass
+    {
+
+        public int[] QuickSort(int[] array, int minIndex, int maxIndex)
+        {
+            if (minIndex >= maxIndex)
+            {
+                return array;
+            }
+
+            int pivotIndex = GetPivotIndex(array, minIndex, maxIndex);
+
+            QuickSort(array, minIndex, pivotIndex - 1);
+            QuickSort(array, pivotIndex + 1, maxIndex);
+
+            return array;
+        }
+
+        public int[] QuickSort(int[] array)
+        {
+            return QuickSort(array, 0, array.Length - 1);
+        }
+
+        private int GetPivotIndex(int[] array, int minIndex, int maxIndex)
+        {
+            int pivotIndex = minIndex - 1;
+
+            for (int i = minIndex; i < maxIndex; i++)
+            {
+                if (array[i] < array[maxIndex])
+                {
+                    pivotIndex++;
+                    Swap(ref array[pivotIndex], ref array[i]);
+                }
+            }
+
+            pivotIndex++;
+            Swap(ref array[pivotIndex], ref array[maxIndex]);
+
+            return pivotIndex;
+        }
+
+        private void Swap(ref int leftItem, ref int rightItem)
+        {
+            int temp = leftItem;
+            leftItem = rightItem;
+            rightItem = temp;
+        }
+    }
+
     class Program
     {
         private Dictionary<string, int> GetDensityChars(string s)
@@ -72,7 +219,6 @@ namespace MaximTechC_
                 }
                 res = s.Substring(startIndex, endIndex - startIndex + 1);
             }
-
             return res;
         }
 
@@ -129,17 +275,64 @@ namespace MaximTechC_
 
         static void Main(string[] args)
         {
-            // task 3
+            //task 1, 2
             Program program = new Program();
+
             string res = program.ProcessString();
-            if (res != "Error")
+            if (res == "Error")
             {
-                Console.WriteLine("Результат: {0}", res);
-                Dictionary<string, int> dctDensity = program.GetDensityChars(res);
-                string dictInfo = program.ReadDictionary(dctDensity);
-                Console.WriteLine("Частота встречаемости символов в обработанной строке:");
-                Console.WriteLine(dictInfo);
-                Console.WriteLine("Самая длинная подстрока: " + program.GetLongestSequence(res));
+                return;
+            }
+            Console.WriteLine("Результат: {0}", res); 
+
+            //task3
+            Dictionary<string, int> dctDensity = program.GetDensityChars(res);
+            string dictInfo = program.ReadDictionary(dctDensity);
+            Console.WriteLine("Частота встречаемости символов в обработанной строке:");
+            Console.WriteLine(dictInfo);
+
+
+            // task 4
+            Console.WriteLine("Самая длинная подстрока: " + program.GetLongestSequence(res));
+
+
+            //task5
+            int[] asciiCodes = new int[res.Length];
+            int[] sortedAsciiCodes;
+
+            for (int i = 0; i < res.Length; i++)
+            {
+                asciiCodes[i] = Convert.ToByte(res[i]);
+            }
+
+            Console.WriteLine("Каким образом вы хотите отсортировать строку? Введите одну цифру: \n 1 - Быстрая сортировка (Quick Sort)\n 2 - Сортировка Деревом (Tree Sort)");
+            char inputedChar = Console.ReadKey().KeyChar;
+            char[] allowedAndswers = new char[] { '1', '2' };
+
+            while (!allowedAndswers.Contains(inputedChar))
+            {
+                Console.WriteLine("\nОшибка! Попробуйте еще раз!");
+                inputedChar = Console.ReadKey().KeyChar;
+            }
+
+            if (inputedChar == allowedAndswers[0])
+            {
+                QuickSortClass quickSortExecutor = new QuickSortClass();
+                sortedAsciiCodes = quickSortExecutor.QuickSort(asciiCodes);
+            }
+            else if (inputedChar == allowedAndswers[1]) 
+            {
+                sortedAsciiCodes = TreeSortClass.TreeSort(asciiCodes);
+            }
+            else
+            {
+                sortedAsciiCodes = new int[] { 1, 2, 3, 4 };
+            }
+
+            Console.Write("\nОтсортированная строка: ");
+            foreach (int code in sortedAsciiCodes)
+            {
+                Console.Write(Convert.ToChar(code));
             }
         }
     }
