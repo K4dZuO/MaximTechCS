@@ -38,6 +38,44 @@ namespace MaximTechC_
             return res;
         }
 
+        private string GetLongestSequence(string s)
+        {
+            string res;
+            int startIndex = -1;
+            int endIndex = s.Length - 1;
+            char[] allowedChars = "aeiouy".ToCharArray();
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                char c = s[i];
+                if (allowedChars.Contains(c))
+                {
+                    startIndex = i;
+                    break;
+                }
+            }
+
+            if (startIndex == -1)
+            {
+                return "";
+            }
+            else
+            {
+                for (int i = s.Length - 1; i > 0; i--)
+                {
+                    char c = s[i];
+                    if (allowedChars.Contains(c))
+                    {
+                        endIndex = i;
+                        break;
+                    }
+                }
+                res = s.Substring(startIndex, endIndex - startIndex + 1);
+            }
+
+            return res;
+        }
+
         private string ProcessString()
         {
             string s;
@@ -101,6 +139,7 @@ namespace MaximTechC_
                 string dictInfo = program.ReadDictionary(dctDensity);
                 Console.WriteLine("Частота встречаемости символов в обработанной строке:");
                 Console.WriteLine(dictInfo);
+                Console.WriteLine("Самая длинная подстрока: " + program.GetLongestSequence(res));
             }
         }
     }
