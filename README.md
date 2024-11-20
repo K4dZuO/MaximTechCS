@@ -1,1 +1,2 @@
-Initialized commit.
+Для корректной работы с получением случайного число через сайт random.org требуется вставить API ключ в поле "APIKey": "" в файле config.json.
+Получить его можно на сайте https://api.random.org/dashboard 
