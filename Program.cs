@@ -355,7 +355,7 @@ namespace MaximTechC_
             //task3
             Dictionary<string, int> dctDensity = program.GetDensityChars(res);
             string dictInfo = program.ReadDictionary(dctDensity);
-            Console.WriteLine("Частота встречаемости символов в обработанной строке:");
+            Console.WriteLine("\nЧастота встречаемости символов в обработанной строке:");
             Console.WriteLine(dictInfo);
 
 
@@ -372,7 +372,7 @@ namespace MaximTechC_
                 asciiCodes[i] = Convert.ToByte(res[i]);
             }
 
-            Console.WriteLine("Каким образом вы хотите отсортировать строку? Введите одну цифру: \n 1 - Быстрая сортировка (Quick Sort)\n 2 - Сортировка Деревом (Tree Sort)");
+            Console.WriteLine("\nКаким образом вы хотите отсортировать строку? Введите одну цифру: \n 1 - Быстрая сортировка (Quick Sort)\n 2 - Сортировка Деревом (Tree Sort)");
             char inputedChar = Console.ReadKey().KeyChar;
             char[] allowedAndswers = new char[] { '1', '2' };
 
@@ -403,8 +403,15 @@ namespace MaximTechC_
             }
 
             // task 6
+            if (res.Length == 0)
+            {
+                Console.WriteLine("\nВведенная строка пустая! Удалять нечего!");
+                return;
+            }
             int randomIndex = APIClass.GetRandomNumberAsync(res.Length).GetAwaiter().GetResult(); // Синхронный вызов
-            Console.WriteLine($"\nСлучайное число: {randomIndex}");
+            Console.WriteLine($"\n\nСлучайное число: {randomIndex}");
+
+            Console.WriteLine($"Символ на {randomIndex} индексе: {res[randomIndex]}");
             res = res.Remove(randomIndex, 1);
             Console.WriteLine($"Обработанная строка без символа на {randomIndex}-ом индексе: {res}");
         }
