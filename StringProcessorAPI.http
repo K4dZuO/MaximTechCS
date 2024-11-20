@@ -1,0 +1,6 @@
+@StringProcessorAPI_HostAddress = http://localhost:5264
+
+GET {{StringProcessorAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
